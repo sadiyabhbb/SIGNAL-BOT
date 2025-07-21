@@ -13,16 +13,15 @@ async function fetchPrice() {
     });
 
     const data = response.data;
+    console.log('[DEBUG] API response:', data);
 
-    // 🛡️ Validate response
     if (!data || !data.values || !Array.isArray(data.values)) {
-      console.error('[❌] Invalid API response:', data);
+      console.error('[❌] Invalid API response structure.');
       return null;
     }
 
-    // 🔄 Convert close prices to float
-    const prices = data.values.map((point) => parseFloat(point.close));
-    return prices.reverse(); // latest price at end
+    const prices = data.values.map(point => parseFloat(point.close));
+    return prices.reverse();
 
   } catch (error) {
     console.error('[❌] Price fetch error:', error.message);
