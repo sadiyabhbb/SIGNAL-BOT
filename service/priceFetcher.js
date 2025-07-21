@@ -1,4 +1,3 @@
-// service/priceFetcher.js
 const axios = require('axios');
 const API_KEY = process.env.TWELVEDATA_API_KEY;
 
@@ -6,9 +5,9 @@ async function fetchPrice() {
   try {
     const response = await axios.get('https://api.twelvedata.com/time_series', {
       params: {
-        symbol: 'EURJPY',      // এখানে স্ল্যাশ নেই, একসাথে লিখতে হবে
+        symbol: 'EUR/JPY', // ✅ একদম ঠিক symbol
         interval: '1min',
-        outputsize: 30,        // তোমার বাকি কোড অনুযায়ী ৩০ দরকার
+        outputsize: 30,
         apikey: API_KEY,
       },
     });
@@ -21,7 +20,6 @@ async function fetchPrice() {
       return null;
     }
 
-    // Close price গুলো নিয়ে array বানাও
     const prices = data.values.map(point => parseFloat(point.close));
     return prices.reverse();
 
