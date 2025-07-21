@@ -21,9 +21,14 @@ app.listen(PORT, () => {
   console.log(`[🌐] Web service running on port ${PORT}`);
 });
 
+// Helper: Get BD time
+function getBDTime() {
+  return new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Dhaka' });
+}
+
 // Signal loop
 async function mainLoop() {
-  console.log(`\n[⏱️] Checking market at ${new Date().toLocaleTimeString()}`);
+  console.log(`\n[⏱️] Checking market at ${getBDTime()}`);
   const prices = await fetchPrices(PAIR);
   if (!prices || prices.length < 30) return console.log('[❌] Price fetch failed.');
 
@@ -31,7 +36,7 @@ async function mainLoop() {
   console.log(`[📡] Signal for ${PAIR}: ${signal}`);
 
   if (signal !== 'WAIT') {
-    const msg = `🟢 Signal: ${signal}\n📉 Pair: ${PAIR}\n⏱️ Timeframe: 1m\n🕒 Time: ${new Date().toLocaleTimeString()}`;
+    const msg = `🟢 Signal: ${signal}\n📉 Pair: ${PAIR}\n⏱️ Timeframe: 1m\n🕒 Time: ${getBDTime()}`;
     await sendTelegram(msg);
   }
 }
