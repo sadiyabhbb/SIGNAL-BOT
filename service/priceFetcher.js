@@ -5,9 +5,9 @@ async function fetchPrice() {
   try {
     const response = await axios.get('https://api.twelvedata.com/time_series', {
       params: {
-        symbol: 'EUR/JPY',
+        symbol: 'EURJPY',    // '/' বাদ দিয়ে দেয়া হয়েছে
         interval: '1min',
-        outputsize: 5,
+        outputsize: 30,      // signal এর জন্য ৩০টা ডাটা নিলে ভালো হয়
         apikey: API_KEY,
       },
     });
@@ -20,6 +20,7 @@ async function fetchPrice() {
       return null;
     }
 
+    // close প্রাইসগুলো নিয়ে রিভার্স করে রিটার্ন করবো
     const prices = data.values.map(point => parseFloat(point.close));
     return prices.reverse();
 
