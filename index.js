@@ -1,9 +1,9 @@
 // 📦 auto-signal-bot/index.js
 require('dotenv').config();
 const express = require('express');
-const fetchPrices = require('./services/priceFetcher');
+const fetchPrices = require('./service/priceFetcher');
 const generateSignal = require('./signalEngine');
-const sendTelegram = require('./services/sendTelegram');
+const sendTelegram = require('./service/sendTelegram');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
