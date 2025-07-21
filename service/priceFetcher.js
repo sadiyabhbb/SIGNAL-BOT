@@ -1,18 +1,33 @@
-// 📦 services/priceFetcher.js
 const axios = require('axios');
+const API_KEY = process.env.TWELVEDATA_API_KEY;
 
-const API_KEY = process.env.TWELVEDATA_API_KEY || 'YOUR_DEMO_KEY_HERE';
-
-module.exports = async function fetchPrices(pair = 'EUR/JPY') {
+async function fetchPrice() {
   try {
-    const sym = pair.replace('/', '');
-    const url = `https://api.twelvedata.com/time_series?symbol=${sym}&interval=1min&outputsize=30&apikey=${API_KEY}`;
-    const res = await axios.get(url);
-    const data = res.data.values;
-    const closes = data.map(d => parseFloat(d.close)).reverse();
-    return closes;
-  } catch (err) {
-    console.error('[❌] Price fetch error:', err.message);
+    const response = await axios.get('https://api.twelvedata.com/time_series', {
+      params: {
+        symbol: 'EUR/JPY',
+        interval: '1min',
+        outputsize: 5,
+        apikey: API_KEY,
+      },
+    });
+
+    const data = response.data;
+
+    // 🛡️ Validate response
+    if (!data || !data.values || !Array.isArray(data.values)) {
+      console.error('[❌] Invalid API response:', data);
+      return null;
+    }
+
+    // 🔄 Convert close prices to float
+    const prices = data.values.map((point) => parseFloat(point.close));
+    return prices.reverse(); // latest price at end
+
+  } catch (error) {
+    console.error('[❌] Price fetch error:', error.message);
     return null;
   }
-};
+}
+
+module.exports = fetchPrice;
